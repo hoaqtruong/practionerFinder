@@ -1,0 +1,14 @@
+Countries by Area
+http://www.jasondavies.com/maps/countries-by-area/
+
+GeoCode converter
+http://techslides.com/demos/raphael/geo-convert.html
+
+3-Letter country code
+http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+
+Countries that missing ISO 3166 code
+Vatican City
+Christmas Island
+Cocos Islands
+Svalbard and Jan Mayen

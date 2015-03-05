@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>Exploring World Countries with D3 | TechSlides</title>
+<style>
+#container {
+  margin:10px 10%;
+  padding:20px;
+  border:2px solid #d0d0d0;
+  border-radius: 5px;
+  height:100%;
+  clear:both;
+}
+#next{
+  float:right;
+}
+#previous{
+  float:left;
+}
+#center{
+  margin: 10px 40% -30px;
+  width: 20%;
+  text-align: center;
+  padding: 2px 4px;
+  clear: both;
+}
+#next, #previous {
+  cursor:pointer;
+  border:2px solid #ccc;
+  padding:2px 4px;
+  margin:10px 10%;
+}
+#info{
+  margin:10px 10%;
+  background: #fff;
+  border: 2px solid #ccc;
+  padding:10px;
+}
+#info div {
+  height:20px;
+  clear:both;
+}
+#info label {
+  font-weight: bold;
+  width: 130px;
+  display: inline-block;
+  text-transform: capitalize;
+}
+.block,#save,#top{
+  margin:10px 10%;
+}
+.hidden { 
+  display: none; 
+}
+div.tooltip {
+  color: #222; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+}
+</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-941940-28']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+
+  <div id="top">
+    <h1>Exploring Countries in D3.js</h1>
+    <p>This demo allows you to explore world countries and capitals at 10m scale.  Country data is provided by Natural Earth.  Capitals are generated using World Bank, CIA Factbook, and Wikipedia.  Geo Data is rendered with D3 using a combination of CSV, JSON, and TopoJSON files.  You can explore countries by income group and economy using the select boxes below.  Finally, you can convert any rendered map into an image. <a href="http://techslides.com/countries-and-capitals-with-d3-and-natural-earth/">Back to Article</a></p>
+
+  </div>
+
+  <div class="block">
+    <label for="country">Select a Country:</label>
+    <select id="country" name="country"></select>
+  </div>
+
+  <div class="block">
+    <label for="income">Highlight Countries by Income Group:</label>
+    <select id="income" name="income">
+      <option value="0">Select Here</option>
+      <option value="1. High income: OECD">High income: OECD</option>
+      <option value="2. High income: nonOECD">High income: Non OECD</option>
+      <option value="3. Upper middle income">Upper middle income</option>
+      <option value="4. Lower middle income">Lower middle income</option>
+      <option value="5. Low income">Low income</option>
+    </select>
+  </div>
+
+
+  <div class="block">
+    <label for="economy">Highlight Countries by Economy:</label>
+    <select id="economy" name="economy">
+      <option value="0">Select Here</option>
+      <option value="1. Developed region: G7">Developed region: G7</option>
+      <option value="2. Developed region: nonG7">Developed region: Non G7</option>
+      <option value="3. Emerging region: BRIC">Emerging region: BRIC</option>
+      <option value="4. Emerging region: MIKT">Emerging region: MIKT</option>
+      <option value="5. Emerging region: G20">Emerging region: G20</option>
+      <option value="6. Developing region">Developing region</option>
+      <option value="7. Least developed region">Least developed region</option>
+    </select>
+  </div>
+
+
+  <div id="center">Loading...</div>
+
+  <div id="next" style="visibility:hidden">NEXT</div>
+  <div id="previous" style="visibility:hidden">PREVIOUS</div>
+  <div id="container"></div>
+  <button id="save">Save Map to SVG</button>
+
+  <div id="info"></div>
+
+<script src="js/d3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+
+
+<script>
+//queue
+(function(){function n(n){function t(){for(;f=a<c.length&&n>p;){var u=a++,t=c[u],r=l.call(t,1);r.push(e(u)),++p,t[0].apply(null,r)}}function e(n){return function(u,l){--p,null==d&&(null!=u?(d=u,a=s=0/0,r()):(c[n]=l,--s?f||t():r()))}}function r(){null!=d?v(d):i?v(d,c):v.apply(null,[d].concat(c))}var o,f,i,c=[],a=0,p=0,s=0,d=null,v=u;return n||(n=1/0),o={defer:function(){return d||(c.push(arguments),++s,t()),o},await:function(n){return v=n,i=!1,s||r(),o},awaitAll:function(n){return v=n,i=!0,s||r(),o}}}function u(){}"undefined"==typeof module?self.queue=n:module.exports=n,n.version="1.0.4";var l=[].slice})();
+
+
+
+var width = document.getElementById('container').offsetWidth-60;
+var height = width / 2;
+
+var topo,projection,path,svg,g,all,cdata,ccapitals,
+current = 16; //current country, randomly choosen number
+
+var tooltip = d3.select("body").append("div").attr("class", "tooltip hidden");
+
+setup(width,height);
+
+function setup(width,height){
+
+  projection = d3.geo.mercator().translate([0, 0]).scale(width / 2 / Math.PI);
+
+  path = d3.geo.path().projection(projection);
+
+  svg = d3.select("#container").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill","#fff")
+      .on("click", loadworldmap);
+
+  var outterg = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  g = outterg.append("g").attr("id", "innerg");
+
+  //setup next and previous links
+  d3.select("#next").on("click",function(){
+    var next = current + 1;
+    if(cdata[next] !== undefined){
+      loadit(cdata[next]);
+      current++;
+    }
+  });
+
+  d3.select("#previous").on("click",function(){
+    if(current == 0){
+      var previous = all-1;
+    } else {
+      var previous = current-1;
+    }
+    if(cdata[previous] !== undefined){
+      loadit(cdata[previous]);
+      current--;
+    }
+  });
+
+}
+
+
+queue()
+    .defer(d3.csv, "data/countries-data.csv")
+    .defer(d3.json, "data/capitals.json")
+    .await(ready);
+
+function ready(error, countries, capitals) {
+  cdata = countries;
+  ccapitals = capitals;
+
+  loadworldmap();
+
+
+  //country dropdown
+  var options = '';
+  cdata.forEach(function(d) {
+    options += '<option value="'+d.iso_a3+'">'+d.name+'</option>';
+  });
+  
+  d3.select("#country").html(options)
+    .on("change", function() {
+      var sel = this.value;
+      var obj = cdata.filter(function(f){return f.iso_a3 == sel})[0];
+      loadit(obj);
+  });
+
+  //color countries and print country names to info box
+  function colorandprint(objs,title){
+    d3.selectAll('.country').style('fill','#ccc'); //clear
+    
+    var html = '<h2>Category: '+title+'</h2><br><br>';
+
+    objs.forEach(function(f){ 
+      d3.select('.country[title="'+f.name+'"]').style('fill','#666')
+      html += f.name+'<br>';
+    });
+
+    d3.select("#info").html(html);
+  }
+
+  //income dropdown
+  d3.select("#income").on("change", function() {
+
+      d3.select("#economy")[0][0].selectedIndex = 0;
+
+      var sel = this.value;
+      if(sel !== 0){
+        var objs = cdata.filter(function(f){return f.income_grp == sel});
+        colorandprint(objs,sel);
+      }
+
+  });
+
+  //economy dropdown
+  d3.select("#economy").on("change", function() {
+
+      d3.select("#income")[0][0].selectedIndex = 0;
+
+      var sel = this.value;
+      if(sel !== 0){
+        var objs = cdata.filter(function(f){return f.economy == sel});
+        colorandprint(objs,sel);        
+      }
+
+  });
+
+}
+
+
+function loadworldmap() {
+
+  clear();
+  g.style("stroke-width", 1).attr("transform", "");
+  d3.select("#next").style("visibility","hidden");
+  d3.select("#previous").style("visibility","hidden");
+
+  d3.json("data/world-topo-110m.json", function(error, world) {
+
+    var topo = topojson.feature(world, world.objects.countries).features;
+
+    var country = d3.select("#innerg").selectAll(".country").data(topo);
+
+    //ofsets
+    var offsetL = document.getElementById('container').offsetLeft+30;
+    var offsetT =document.getElementById('container').offsetTop-30;
+
+    country.enter().insert("path")
+      .attr("class", "country")
+      .attr("d", path)
+      .attr("id", function(d,i) { return d.id; })
+      .attr("title", function(d,i) { return d.properties.name; })
+      .style("fill","#ccc")
+      .style("stroke", "#111")
+      .on("click", click)
+      .on("mousemove", function(d,i) {
+        var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+        tooltip.classed("hidden", false)
+          .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
+          .html(d.properties.name);
+      })
+      .on("mouseout",  function(d,i) {
+        tooltip.classed("hidden", true);
+      });
+
+    d3.select("#center").text("World Map");
+   
+  });
+
+}
+
+
+
+function click(d) {
+  //click going to the country
+  var obj = cdata.filter(function(f){return f.iso_n3 == d.id})[0];
+  loadit(obj);
+}
+
+
+function loadit(countryobj) {
+
+  tooltip.attr("class","tooltip hidden");
+  d3.select("#next").style("visibility","");
+  d3.select("#previous").style("visibility","");
+
+  var name = countryobj.name;
+  var code = countryobj.iso_a3;
+  var filename = "data/countries-10m-topojson/"+code+".json";
+
+  d3.json(filename, function(error, country) {
+
+    var obj = topojson.feature(country, country.objects[code]);
+
+    clear();
+
+    var b = path.bounds(obj);
+    var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+
+    g.style("stroke-width", 1 / s).attr("transform", "scale(" + s + ")" + 
+              "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+
+
+    d3.select("#innerg").append("path").datum(obj)
+      .style("fill","#ccc")
+      .style("stroke", "#111")
+      .attr("d", path);
+
+    d3.select("#center").text(name);
+
+    //data object to html
+    var html = '';
+
+    for (var o in countryobj) {
+      if (countryobj.hasOwnProperty(o)) {
+        var label = o;
+        var value = countryobj[o];
+        var info = '<div><label>'+label+'</label><span>'+value+'</span></div>';
+        html += info; //with formatting
+      }
+    }
+
+    d3.select("#info").html(html);
+
+    //find the capital
+    var cap = ccapitals.filter(function(f){ if(f.country == name){ return f; }  });
+    if(cap.length > 0){
+      var capital = cap[0].capital;
+      var lat = cap[0].lat;
+      var lon = cap[0].lon;
+      var lonlat = [lon,lat]; //reversed for d3
+
+      //plot the capital
+      var x = projection(lonlat)[0];
+      var y = projection(lonlat)[1];
+
+      var size = (1/s * 30);
+      var p = (1/s * 10);
+
+      g.append("svg:circle")
+          .attr("class","point")
+          .attr("cx", x)
+          .attr("cy", y)
+          .attr("r", p)
+          .style("fill","#000");
+
+      g.append("text")
+          .attr("x", x+.5)
+          .attr("y", y)
+          .style("font-size", size)
+          .text(capital);
+
+    }
+
+
+    });
+
+
+}
+
+function clear(){
+  //clear shit
+  d3.selectAll("path").remove();
+  d3.selectAll("circle").remove();
+  d3.selectAll("text").remove();
+  d3.select("#info").html("");
+}
+
+//SAVE TO IMAGE
+d3.select("#save").on("click", function(){
+  var html = d3.select("svg")
+        .attr("version", 1.1)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .node().parentNode.innerHTML;
+
+  console.log(html);
+
+  var img = '<img src="data:image/svg+xml;base64,'+ btoa(html)+'">'; 
+  d3.select("#info").html(img);
+});
+
+</script>
+</body>
+</html>
