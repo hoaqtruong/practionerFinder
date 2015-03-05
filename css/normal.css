@@ -1,0 +1,92 @@
+#finder-wrapper {
+
+}
+#container {
+    width: 80%;
+    margin: 0 auto;
+    clear:both;
+}
+.clearfix {
+    overflow: auto;
+}
+
+/*--------- MAP -------------*/
+#map-box {
+    float: left;
+    width: 48%;
+    margin:10px 5px 0 auto;
+    padding:1px;
+    border:2px solid #d0d0d0;
+    border-radius: 5px;
+}
+#map {
+
+}
+
+/*--------- RESULT -------------*/
+#result-box {
+    float: right;
+    width: 48%;
+    margin: 10px auto 0 5px;
+}
+#result {
+
+}
+#result-table {
+    width: 100% ;
+    text-align: left;
+}
+
+
+#next{
+    float:right;
+}
+#previous{
+    float:left;
+}
+#instruction{
+    margin: auto auto;
+    width: 50%;
+    font-style: italic;
+    text-align: center;
+    padding: 2px 4px;
+    clear: both;
+}
+#next, #previous {
+    cursor:pointer;
+    border:2px solid #ccc;
+    padding:2px 4px;
+    margin:10px 10%;
+}
+#info{
+    margin:10px 10%;
+    background: #fff;
+    border: 2px solid #ccc;
+    padding:10px;
+}
+#info div {
+    height:20px;
+    clear:both;
+}
+#info label {
+    font-weight: bold;
+    width: 130px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+.block,#save,#top{
+    margin:10px 10%;
+}
+.hidden {
+    display: none;
+}
+div.tooltip {
+    color: #222;
+    background: #fff;
+    padding: .5em;
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px;
+    box-shadow: 0px 0px 2px 0px #a6a6a6;
+    opacity: 0.9;
+    position: absolute;
+}

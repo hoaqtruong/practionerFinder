@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>Exploring World Countries with D3 | TechSlides</title>
+  <link rel="stylesheet" href="css/normal.css">
+<style>
+
+</style>
+
+</head>
+<body>
+<div id="finder-wrapper">
+  <div id="top">
+    <h1>Practitioner Finder</h1>
+
+  </div>
+
+
+  <!--<div class="block">-->
+    <!--<label for="income">Highlight Countries by Income Group:</label>-->
+    <!--<select id="income" name="income">-->
+      <!--<option value="0">Select Here</option>-->
+      <!--<option value="1. High income: OECD">High income: OECD</option>-->
+      <!--<option value="2. High income: nonOECD">High income: Non OECD</option>-->
+      <!--<option value="3. Upper middle income">Upper middle income</option>-->
+      <!--<option value="4. Lower middle income">Lower middle income</option>-->
+      <!--<option value="5. Low income">Low income</option>-->
+    <!--</select>-->
+  <!--</div>-->
+
+
+  <!--<div class="block">-->
+    <!--<label for="economy">Highlight Countries by Economy:</label>-->
+    <!--<select id="economy" name="economy">-->
+      <!--<option value="0">Select Here</option>-->
+      <!--<option value="1. Developed region: G7">Developed region: G7</option>-->
+      <!--<option value="2. Developed region: nonG7">Developed region: Non G7</option>-->
+      <!--<option value="3. Emerging region: BRIC">Emerging region: BRIC</option>-->
+      <!--<option value="4. Emerging region: MIKT">Emerging region: MIKT</option>-->
+      <!--<option value="5. Emerging region: G20">Emerging region: G20</option>-->
+      <!--<option value="6. Developing region">Developing region</option>-->
+      <!--<option value="7. Least developed region">Least developed region</option>-->
+    <!--</select>-->
+  <!--</div>-->
+
+
+  <div id="instruction">Loading...</div>
+  <div class="block">
+    <label for="country">Select a Country:</label>
+    <select id="country" name="country"></select>
+  </div>
+  <div id="next" style="visibility:hidden">NEXT</div>
+  <div id="previous" style="visibility:hidden">PREVIOUS</div>
+  <div id="container"  class="clearfix">
+    <div id="map-box">
+      <div id="map"></div>
+    </div>
+
+    <div id="result-box" class="clearfix">
+      <table id="result-table">
+        <tr>
+          <th>Name</th>
+          <th>Country</th>
+        </tr>
+        <tr>
+          <td>Wart-toed DungBeetle</td>
+          <td>Moon</td>
+        </tr>
+
+
+      </table>
+    </div>
+
+    <div id="result"></div>
+    </div>
+
+  <div id="info"></div>
+
+  <!--<button id="save">Save Map to SVG</button>-->
+</div>
+
+<script src="js/d3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+<script src="js/practitioner-finder.js"></script>
+
+</body>
+</html>
