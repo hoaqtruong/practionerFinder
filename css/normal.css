@@ -23,6 +23,21 @@
 
 }
 
+#zoom {
+    left: 44%;
+    margin: 2px;
+    position: absolute;
+    z-index: 10;
+}
+
+#zoom-in {
+
+}
+
+#zoom-out {
+
+}
+
 /*--------- RESULT -------------*/
 #result-box {
     float: right;

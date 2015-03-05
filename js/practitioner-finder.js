@@ -144,25 +144,17 @@ function loadworldmap() {
 
         var country = d3.select("#innerg").selectAll(".country").data(topo);
 
-        //Tooltip offsets away from mouse pointer
-        var offsetL = document.getElementById('map').offsetLeft+30;
-        var offsetT = document.getElementById('map').offsetTop-30;
 
-        //Print tooltip
+        //Tooltip country name
         country.enter().insert("path")
             .attr("class", "country")
             .attr("d", path)
             .attr("id", function(d,i) { return d.id; })
             .attr("title", function(d,i) { return d.properties.name; })
-            .style("fill","#ccc")
+            .style("fill", "#ccc")
             .style("stroke", "#111")
             .on("click", click)
-            .on("mousemove", function(d,i) {
-                var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
-                tooltip.classed("hidden", false)
-                    .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-                    .html(d.properties.name);
-            })
+           .on("mousemove", mouseover)
             .on("mouseout",  function(d,i) {
                 tooltip.classed("hidden", true);
             });
@@ -173,7 +165,18 @@ function loadworldmap() {
 
 }
 
+function mouseover(d,i) {
+    //Tooltip offsets away from mouse pointer
+    var offsetL = document.getElementById('map').offsetLeft+30;
+    var offsetT = document.getElementById('map').offsetTop-30;
+    var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 
+    //print tooltip country name
+    tooltip.classed("hidden", false)
+        .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
+        .html(d.properties.name);
+
+}
 
 function click(d) {
     //click going to the country
@@ -201,6 +204,8 @@ function loadit(countryobj) {
         var b = path.bounds(obj);
         var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
 
+
+        //Center the country to the middle of the map
         g.style("stroke-width", 1 / s).attr("transform", "scale(" + s + ")" +
         "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
 
