@@ -37,7 +37,10 @@
 #zoom-out {
 
 }
-
+.country:hover{
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
 /*--------- RESULT -------------*/
 #result-box {
     float: right;

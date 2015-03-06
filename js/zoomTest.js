@@ -1,104 +1,80 @@
-d3.select(window).on("resize", throttle);
+var width = 960,
+    height = 500;
 
-var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 8])
-    .on("zoom", move);
+var randomX = d3.random.normal(width / 2, 80),
+    randomY = d3.random.normal(height / 2, 80);
 
-var width = document.getElementById('map').offsetWidth;
-var height = width / 2;
-
-var topo,projection,path,svg,g;
-
-var tooltip = d3.select("#map").append("div").attr("class", "tooltip hidden");
-
-setup(width,height);
-
-function setup(width,height){
-    projection = d3.geo.mercator()
-        .translate([0, 0])
-        .scale(width / 2 / Math.PI);
-
-    path = d3.geo.path()
-        .projection(projection);
-
-    svg = d3.select("#map").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-        .call(zoom);
-
-    g = svg.append("g");
-
-}
-
-d3.json("data/world-topo.json", function(error, world) {
-
-    var countries = topojson.feature(world, world.objects.countries).features;
-
-    topo = countries;
-    draw(topo);
-
+var data = d3.range(2000).map(function() {
+    return [randomX(), randomY() ];
 });
 
-function draw(topo) {
+var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
-    var country = g.selectAll(".country").data(topo);
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .call(zoom)
+    .append("g");
 
-    country.enter().insert("path")
-        .attr("class", "country")
-        .attr("d", path)
-        .attr("id", function(d,i) { return d.id; })
-        .attr("title", function(d,i) { return d.properties.name; })
-        .style("fill", function(d, i) { return d.properties.color; });
+svg.append("rect")
+    .attr("class", "overlay")
+    .attr("width", width)
+    .attr("height", height);
 
-    //ofsets plus width/height of transform, plsu 20 px of padding, plus 20 extra for tooltip offset off mouse
-    var offsetL = document.getElementById('map').offsetLeft+(width/2);
-    var offsetT =document.getElementById('map').offsetTop+(height/2);
+svg.selectAll("circle")
+    .data(data)
+    .enter().append("circle")
+    .attr("r", 2.5)
+    .attr("transform", function(d) { return "translate(" + d + ")"; });
 
-    //tooltips
-    country
-        .on("mousemove", function(d,i) {
-            var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
-            tooltip
-                .classed("hidden", false)
-                .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-                .html(d.properties.name)
-        })
-        .on("mouseout",  function(d,i) {
-            tooltip.classed("hidden", true)
-        });
-
-    //print instruction
-
+function zoomed() {
+    svg.attr("transform",
+        "translate(" + zoom.translate() + ")" +
+        "scale(" + zoom.scale() + ")"
+    );
 }
 
-function redraw() {
-    width = document.getElementById('map').offsetWidth;
-    height = width / 2;
-    d3.select('svg').remove();
-    setup(width,height);
-    draw(topo);
+function interpolateZoom (translate, scale) {
+    var self = this;
+    return d3.transition().duration(350).tween("zoom", function () {
+        var iTranslate = d3.interpolate(zoom.translate(), translate),
+            iScale = d3.interpolate(zoom.scale(), scale);
+        return function (t) {
+            zoom
+                .scale(iScale(t))
+                .translate(iTranslate(t));
+            zoomed();
+        };
+    });
 }
 
-function move() {
+function zoomClick() {
+    var clicked = d3.event.target,
+        direction = 1,
+        factor = 0.2,
+        target_zoom = 1,
+        center = [width / 2, height / 2],
+        extent = zoom.scaleExtent(),
+        translate = zoom.translate(),
+        translate0 = [],
+        l = [],
+        view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
-    var t = d3.event.translate;
-    var s = d3.event.scale;
-    var h = height / 3;
+    d3.event.preventDefault();
+    direction = (this.id === 'zoom_in') ? -1 : -1;
+    target_zoom = zoom.scale() * (1 + factor * direction);
 
-    t[0] = Math.min(width / 2 * (s - 1), Math.max(width / 2 * (1 - s), t[0]));
-    t[1] = Math.min(height / 2 * (s - 1) + h * s, Math.max(height / 2 * (1 - s) - h * s, t[1]));
+    if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }
 
-    zoom.translate(t);
-    g.style("stroke-width", 1 / s).attr("transform", "translate(" + t + ")scale(" + s + ")");
+    translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
+    view.k = target_zoom;
+    l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
 
+    view.x += center[0] - l[0];
+    view.y += center[1] - l[1];
+
+    interpolateZoom([view.x, view.y], view.k);
 }
 
-var throttleTimer;
-function throttle() {
-    window.clearTimeout(throttleTimer);
-    throttleTimer = window.setTimeout(function() {
-        redraw();
-    }, 200);
-}
+d3.selectAll('img').on('click', zoomClick);

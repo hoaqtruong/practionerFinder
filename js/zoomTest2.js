@@ -1,15 +1,14 @@
 d3.select(window).on("resize", throttle);
 
 var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 4])
     .on("zoom", move);
 
 var width = document.getElementById('map').offsetWidth;
 var height = width / 2;
-
-var topo,projection,path,svg,g;
-
+var biogRed = "#93173B";
 var mapColor = "#c19a6b";
+var topo,projection,path,svg,g;
 
 var tooltip = d3.select("#map").append("div").attr("class", "tooltip hidden");
 
@@ -34,7 +33,7 @@ function setup(width,height){
 
 }
 
-d3.json("data/world-topo.json", function(error, world) {
+d3.json("data/world-topo-min.json", function(error, world) {
 
     var countries = topojson.feature(world, world.objects.countries).features;
 
@@ -54,12 +53,9 @@ function draw(topo) {
         .attr("title", function(d,i) { return d.properties.name; })
         .style("fill", mapColor );
 
-    // Fill with default color
-    //function(d, i) { return d.properties.color ; });
-
     //ofsets plus width/height of transform, plsu 20 px of padding, plus 20 extra for tooltip offset off mouse
-    var offsetL = document.getElementById('container').offsetLeft+(width/2)+40;
-    var offsetT =document.getElementById('container').offsetTop+(height/2)+20;
+    var offsetL = document.getElementById('map').offsetLeft+(width/2);
+    var offsetT =document.getElementById('map').offsetTop+(height/2);
 
     //tooltips
     country
@@ -73,6 +69,8 @@ function draw(topo) {
         .on("mouseout",  function(d,i) {
             tooltip.classed("hidden", true)
         });
+
+    //print instruction
 
 }
 
@@ -104,32 +102,4 @@ function throttle() {
     throttleTimer = window.setTimeout(function() {
         redraw();
     }, 200);
-}
-
-
-function LightenDarkenColor(col,amt) {
-    var usePound = false;
-    if ( col[0] == "#" ) {
-        col = col.slice(1);
-        usePound = true;
-    }
-
-    var num = parseInt(col,16);
-
-    var r = (num >> 16) + amt;
-
-    if ( r > 255 ) r = 255;
-    else if  (r < 0) r = 0;
-
-    var b = ((num >> 8) & 0x00FF) + amt;
-
-    if ( b > 255 ) b = 255;
-    else if  (b < 0) b = 0;
-
-    var g = (num & 0x0000FF) + amt;
-
-    if ( g > 255 ) g = 255;
-    else if  ( g < 0 ) g = 0;
-
-    return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 }
