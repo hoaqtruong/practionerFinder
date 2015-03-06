@@ -45,10 +45,10 @@
 
 
   <div id="instruction">Use zoom and pan tools to find a Asset Recovery Practitioner or simply use the below drop down menu to find by country</div>
-  <div class="block">
-    <label for="country">Select a Country:</label>
-    <select id="country" name="country"></select>
-  </div>
+  <!--<div class="block">-->
+    <!--<label for="country">Select a Country:</label>-->
+    <!--<select id="country" name="country"></select>-->
+  <!--</div>-->
 
   <div id="next" style="visibility:hidden">NEXT</div>
   <div id="previous" style="visibility:hidden">PREVIOUS</div>
@@ -66,15 +66,7 @@
     </div>
 
     <div id="result-box" class="clearfix">
-      <table id="result-table">
-        <tr>
-          <th>Name</th>
-          <th>Country</th>
-        </tr>
-        <tr>
-          <td>Wart-toed DungBeetle</td>
-          <td>Moon</td>
-        </tr>
+      <table id="expert-table">
       </table>
     </div>
 
@@ -86,9 +78,47 @@
   <!--<button id="save">Save Map to SVG</button>-->
 </div>
 
+<script>
+  var experts = [
+    {first_name: 'Warttoed', last_name: 'Dung Beatle', email: 'warttoed.dungbeatle@example.com', country: 'Aruba',
+      experiences: ['Investigation/Tracing', 'Repatriation']},
+    {first_name: 'Jimmy', last_name: 'Joon', email: 'jimmy.joon@example.com', country: 'Switzerland',
+      experiences: ['Judiciary']},
+    {first_name: 'Loon', last_name: 'ByTheMoon', email: 'loonymoony@example.com', country: 'France',
+      experiences: ['Forensic Analysis']},
+    {first_name: 'Hans', last_name: 'Zimmer', email: 'hans.zimmer@example.com', country: 'Germany',
+      experiences: ['Prosecution', 'Repatriation']},
+    {first_name: 'Hanna', last_name: 'Arendt', email: 'hanna.arendt@example.com', country: 'France',
+      experiences: ['Investigation/Tracing', 'FMLA Preparation/Execution']},
+    {first_name: 'Umuk', last_name: 'Zirka', email: 'umuk.zirka@example.com', country: 'Italy',
+      experiences: ['Judiciary', 'Repatriation']}
+  ]
+  experts.filterAndSort = function(country) {
+   var filtered = this.filter(function(expert) {
+      return expert.country == country;
+    })
+    return filtered.sort(function(expert1, expert2) {
+      if (expert1.country > expert2.country) {
+        return true;
+      }
+      else if (expert1.country < expert2.country) {
+        return false;
+      }
+      else if (expert1.last_name > expert2.last_name) {
+        return true;
+      }
+      else {
+        return false
+      }
+    });
+  }
+
+</script>
 <script src="js/d3.min.js"></script>
 <script src="js/topojson.v1.min.js"></script>
+<script src="js/jquery-2.1.3.js"></script>
 <script src="js/practitioner-finder.js"></script>
+
 
 </body>
 </html>
