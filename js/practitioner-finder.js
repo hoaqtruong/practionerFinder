@@ -10,7 +10,7 @@
 var width = document.getElementById('map').offsetWidth-5;
 var height = width * 2/3;
 
-var instruction = "Use zoom and pan tools to find a Asset Recovery Practitioner or simple use the below drop down menu to find by country";
+var instruction = "Use zoom and pan tools to find a Asset Recovery Practitioner or simply use the below drop down menu to find by country";
 
 var topo,projection,path,svg,g,all,cdata,ccapitals,
     current = 16; //current country, randomly choosen number
@@ -27,7 +27,12 @@ function setup(width,height){
 
     svg = d3.select("#map").append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+        .call(zoom);
+
+    g = svg.append("g");
 
     svg.append("rect")
         .attr("width", width)
