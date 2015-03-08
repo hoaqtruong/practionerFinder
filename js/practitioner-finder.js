@@ -1,10 +1,5 @@
 d3.select(window).on("resize", throttle);
 
-var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 8])
-    .on("zoom", move);
-
-console.log(zoom.translate());
 
 var width = document.getElementById('map').offsetWidth-1;
 var height = width * 2/3;
@@ -12,6 +7,24 @@ var height = width * 2/3;
 var topo,projection,path,svg,g;
 
 var mapColor = "#c19a6b";
+
+var zoom = d3.behavior.zoom()
+  .scaleExtent([1, 8])
+  .on("zoom", move)
+  .on("zoomend", showPractioners );
+
+// dimensions of the svg element containing the map
+var svgBBox = {top: -height/2, left: -width/2, bottom: height/2, right: width/2};
+//var svgBBox = {
+//  "type": "Feature",
+//  "bbox": [-180.0, -90.0, 180.0, 90.0],
+//  "geometry": {
+//  "type": "Polygon",
+//    "coordinates": [[
+//    [-width/2, -height/2], [20.0, 90.0], [180.0, -5.0], [-30.0, -90.0]
+//  ]]
+//  }
+//}
 
 var tooltip = d3.select("#map").append("div").attr("class", "tooltip hidden");
 
@@ -73,6 +86,9 @@ function draw(topo) {
                 .classed("hidden", false)
                 .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
                 .html(d.properties.name)
+//            if currentCountry != country {
+//              drawExpertTable()
+//            }
         })
         .on("mouseout",  function(d,i) {
             tooltip.classed("hidden", true)
@@ -97,14 +113,14 @@ function move() {
     var s = d3.event.scale;
     var h = height / 3;
 
-    console.log(d3.event.translate);
-
     t[0] = Math.min(width / 2 * (s - 1), Math.max(width / 2 * (1 - s), t[0]));
     t[1] = Math.min(height / 2 * (s - 1) + h * s, Math.max(height / 2 * (1 - s) - h * s, t[1]));
 
-    zoom.translate(t);
     g.style("stroke-width", 1 / s).attr("transform", "translate(" + t + ")scale(" + s + ")");
+}
 
+function showPractioners() {
+  console.log("zoom end");
 }
 
 
@@ -135,8 +151,24 @@ function throttle() {
 function drawExpertTable(country) {
     var table = $('#expert-table');
     table.html('<tr><th>Name</th><th>Country</th> </tr>');
-    $.each(experts.filterAndSort(country), function(index, expert){
+    $.each(experts.filterByCountry(country), function(index, expert){
         var row = '<tr><td>' + expert.first_name + ' ' + expert.last_name + '</td><td>' + expert.country + '</td></tr>';
         table.append(row);
     })
+}
+
+/**
+ * JUST AN EXPERIMENT -- NOT IN USE
+ * Check whether center of bounding is within visible part of the map.
+ * @param bbox
+ * @return true if bbox center is visible, false otherwise
+ */
+function isInFrame( bbox ) {
+  var bboxCenterX = (bbox[1][0] - bbox[0][0]) / 2  // bottom-left.x - topright.x
+  var bboxCenterY = (bbox[1][1] - bbox[0][1]) / 2 // bottom-left.y - topright.y
+  if (bboxCenterX < svgBBox.left) return false;
+  if (bboxCenterX > svgBBox.right) return false;
+  if (bboxCenterY < svgBBox.top) return false;
+  if (bboxCenterY > svgBBox.bottom) return false;
+  return true;
 }
