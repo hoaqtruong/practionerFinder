@@ -15,20 +15,20 @@
  * 
  * @description Create a sortable table with multi-column sorting capabilitys
  * 
- * @example $('table').tablesorter();
- * @desc Create a simple tablesorter interface.
+ * @example $('table').tablesorterOld();
+ * @desc Create a simple tablesorterOld interface.
  * 
- * @example $('table').tablesorter({ sortList:[[0,0],[1,0]] });
- * @desc Create a tablesorter interface and sort on the first and secound column column headers.
+ * @example $('table').tablesorterOld({ sortList:[[0,0],[1,0]] });
+ * @desc Create a tablesorterOld interface and sort on the first and secound column column headers.
  * 
- * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
+ * @example $('table').tablesorterOld({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
  *          
- * @desc Create a tablesorter interface and disableing the first and second  column headers.
+ * @desc Create a tablesorterOld interface and disableing the first and second  column headers.
  *      
  * 
- * @example $('table').tablesorter({ headers: { 0: {sorter:"integer"}, 1: {sorter:"currency"} } });
+ * @example $('table').tablesorterOld({ headers: { 0: {sorter:"integer"}, 1: {sorter:"currency"} } });
  * 
- * @desc Create a tablesorter interface and set a column parser for the first
+ * @desc Create a tablesorterOld interface and set a column parser for the first
  *       and second column.
  * 
  * 
@@ -80,21 +80,21 @@
  *         This option let's you specify a default sorting rule, which is
  *         appended to user-selected rules. Default value: null
  * 
- * @option Boolean widthFixed (optional) Boolean flag indicating if tablesorter
+ * @option Boolean widthFixed (optional) Boolean flag indicating if tablesorterOld
  *         should apply fixed widths to the table columns. This is usefull when
  *         using the pager companion plugin. This options requires the dimension
  *         jquery plugin. Default value: false
  * 
  * @option Boolean cancelSelection (optional) Boolean flag indicating if
- *         tablesorter should cancel selection of the table headers text.
+ *         tablesorterOld should cancel selection of the table headers text.
  *         Default value: true
  * 
- * @option Boolean debug (optional) Boolean flag indicating if tablesorter
+ * @option Boolean debug (optional) Boolean flag indicating if tablesorterOld
  *         should display debuging information usefull for development.
  * 
  * @type jQuery
  * 
- * @name tablesorter
+ * @name tablesorterOld
  * 
  * @cat Plugins/Tablesorter
  * 
@@ -859,7 +859,56 @@
                 return /^[-+]?\d*$/.test($.trim(s.replace(/[,.']/g, '')));
             };
             this.clearTableBody = function (table) {
-                if ($.browser.msie) {
+
+
+                ///fixing $.browser.msie depreciated jQuery function
+
+                (function() {
+                    var matched, browser;
+
+                    // Use of jQuery.browser is frowned upon.
+                    // More details: http://api.jquery.com/jQuery.browser
+                    // jQuery.uaMatch maintained for back-compat
+                    jQuery.uaMatch = function( ua ) {
+                        ua = ua.toLowerCase();
+
+                        var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+                            /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+                            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+                            /(msie) ([\w.]+)/.exec( ua ) ||
+                            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+                            [];
+
+                        return {
+                            browser: match[ 1 ] || "",
+                            version: match[ 2 ] || "0"
+                        };
+                    };
+
+                    matched = jQuery.uaMatch( navigator.userAgent );
+                    browser = {};
+
+                    if ( matched.browser ) {
+                        browser[ matched.browser ] = true;
+                        browser.version = matched.version;
+                    }
+
+                    // Chrome is Webkit, but Webkit is also Safari.
+                    if ( browser.chrome ) {
+                        browser.webkit = true;
+                    } else if ( browser.webkit ) {
+                        browser.safari = true;
+                    }
+
+                    jQuery.browser = browser;
+                })();
+
+                /*********************************/
+
+
+
+
+                if ($.browser.msie) { //depreciated jQuery function, code to fix it is placed above
                     function empty() {
                         while (this.firstChild)
                         this.removeChild(this.firstChild);

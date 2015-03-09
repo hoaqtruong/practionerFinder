@@ -2,27 +2,28 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us">
 <head>
-	<title>jQuery plugin: Tablesorter 2.0 - Force a default sorting order</title>
+	<title>jQuery plugin: Tablesorter 2.0 - Set a initi
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="../themes/blue/style.css" type="text/css" id="" media="print, projection, screen" />
 	<script type="text/javascript" src="../jquery-latest.js"></script>
 	
 	<script type="text/javascript" src="../jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="../addons/pager/jquery.tablesorter.pager.js"></script>
 	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
 	<script type="text/javascript" src="js/docs.js"></script>
 	<script type="text/javascript" src="js/examples.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
-	// call the tablesorter plugin
+	// call the tablesorterOld plugin
 	$("table").tablesorter({
-		// set forced sort on the fourth column and i decending order.
-		sortForce: [[0,0]]
+		// change the default sorting order from 'asc' to 'desc'
+		sortInitialOrder: 'desc'
 	});
 }); </script>
 </head>
 <body>
 <div id="banner">	
 	<h1>table<em>sorter</em></h1>
-	<h2>Force a default sorting order</h2>
+	<h2>Set a initial sorting order</h2>
 	<h3>Flexible client-side table sorting</h3>
 	<a href="index.html">Back to documentation</a>
 </div>
