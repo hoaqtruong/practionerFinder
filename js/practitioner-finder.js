@@ -7,6 +7,8 @@ var topo,projection,path,svg,g;
 
 var activeFilters = [];
 var expertList = new ExpertList( experts ); // experts is a global variable defined in index.html
+
+// Global variable to hold the country that is currently selected in the map:
 var selected_country = null;
 
 var mapColor = "#c19a6b";
@@ -174,15 +176,9 @@ function throttle() {
     }, 200);
 }
 
-//function drawExpertTable(country) {
-//    var table = $('#expert-table');
-//    table.html('<tr><th>Name</th><th>Country</th> </tr>');
-//    $.each(experts.filterByCountry(country), function(index, expert){
-//        var row = '<tr><td>' + expert.first_name + ' ' + expert.last_name + '</td><td>' + expert.country + '</td></tr>';
-//        table.append(row);
-//    })
-//}
-
+/**
+ * Creates head and empty tbody of expert table.
+ */
 function setupExpertTable() {
     var expertTable = $('#expert-table');
     expertTable.html('<thead><tr>' +
@@ -192,6 +188,9 @@ function setupExpertTable() {
     '<th class="header">Experiences</th></tr></thead>' +
     '<tbody>');
 }
+/**
+ * Resets the rows of the expert table tbody with the currently filtered experts.
+ */
 function drawExpertTable() {
     var expertTableBody = $('#expert-table tbody');
     expertTableBody.empty();
@@ -213,26 +212,8 @@ function drawExpertTable() {
     //    widthFixed: true,
     //    widgets: ['zebra']
     //}).tablesorterPager({container: $("#pager")});
-
 }
 
-
-
-
-
-
-//function activeFilters() {
-//    var filtering = [];
-//    var n =  $("input:checked").length;
-//    if ( n ) {
-//        for (i = 0; i < n; i++) {
-//            filtering.push( $("input:checked")[i].value);
-//        }
-//        return filtering;
-//    } else {
-//        return false ;
-//    }
-//}
 
 /**
  * JUST AN EXPERIMENT -- NOT IN USE
