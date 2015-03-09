@@ -6,6 +6,8 @@ var height = width * 2/3;
 var topo,projection,path,svg,g;
 
 var activeFilters = [];
+var expertList = new ExpertList( experts ); // experts is a global variable defined in index.html
+var selected_country = null;
 
 var mapColor = "#c19a6b";
 
@@ -48,20 +50,20 @@ function setup(width,height){
 
     g = svg.append("g");
 
+    setupExpertTable();
     drawExpertTable();
 }
 
 //Add listener to filter checkboxes
-$('input[type=checkbox]').change(
-    function(){
-        if (this.checked) {
-            activeFilters.push(this.value);
-        }
+$('.checkbox input[type=checkbox]').change( function() {
+    if (this.checked) {
+        activeFilters.push(this.value);
     }
- //   console.log(activeFilters);
-   //redraw ExpertTable
-    //drawExpertTable();
-);
+    else {
+        activeFilters = _.without(activeFilters, this.value);
+    }
+    drawExpertTable();
+});
 
 d3.json("data/world-topo.json", function(error, world) {
 
@@ -105,7 +107,13 @@ function draw(topo) {
             tooltip.classed("hidden", true)
         })
         .on('click', function(d, i) {
-            drawExpertTable(d.properties.name);
+            if (d.properties.name == selected_country) {
+                selected_country = null;
+            }
+            else {
+                selected_country = d.properties.name;
+            }
+            drawExpertTable();
     })
 
 }
@@ -175,28 +183,37 @@ function throttle() {
 //    })
 //}
 
-function drawExpertTable(country) {
-    var showingExperts = [];
+function setupExpertTable() {
     var expertTable = $('#expert-table');
-    expertTable.html('');
     expertTable.html('<thead><tr>' +
-                    '<th class="header headerSortUp headerSortDown">Last Name</th>' +
-                    '<th class="header  headerSortUp headerSortDown" >First Name</th>' +
-                    '<th class="header headerSortUp headerSortDown">Country</th>'+
-                ' </tr></thead>' +
-                '<tbody>');
+    '<th class="header headerSortUp headerSortDown">Last Name</th>' +
+    '<th class="header  headerSortUp headerSortDown" >First Name</th>' +
+    '<th class="header headerSortUp headerSortDown">Country</th>'+
+    '<th class="header">Experiences</th></tr></thead>' +
+    '<tbody>');
+}
+function drawExpertTable() {
+    var expertTableBody = $('#expert-table tbody');
+    expertTableBody.empty();
 
-    country ? showingExperts = experts.filterByCountry(country) : showingExperts = experts;
-  //  if (activeFilters) { showingExperts = experts.filterByExperiences() ;}
+    var showingExperts = selected_country ? expertList.filterByCountry(selected_country) : expertList;
+    if (activeFilters.length > 0 ) {
+        showingExperts = showingExperts.filterByExperiences(activeFilters);
+    }
 
-    $.each(showingExperts, function(index, expert){
+    $.each(showingExperts.experts, function(index, expert){
         var row =   '<tr><td class="last-name">' + expert.last_name + '</td>'+
                     '<td class="first-name">'  + expert.first_name + '</td>' +
-                    '<td class="country">' + expert.country + '</td></tr>';
-        expertTable.append(row);
+                    '<td class="country">' + expert.country + '</td> + ' +
+                    '<td class="experiences">' + expert.experiences.join(' ') + '</td></tr>';
+        expertTableBody.append(row);
     })
-    expertTable.append("</tbody>");
-    expertTable.tablesorter();
+
+    //$('#expert-table').tablesorter({
+    //    widthFixed: true,
+    //    widgets: ['zebra']
+    //}).tablesorterPager({container: $("#pager")});
+
 }
 
 
