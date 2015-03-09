@@ -162,11 +162,20 @@ function throttle() {
 //}
 function drawExpertTable(country) {
     var table = $('#expert-table');
-    table.html('<tr><th>Name</th><th>Country</th> </tr>');
+    table.html('<thead><tr>' +
+                    '<th class="header headerSortUp headerSortDown">Last Name</th>' +
+                    '<th class="header  headerSortUp headerSortDown" >First Name</th>' +
+                    '<th class="header headerSortUp headerSortDown">Country</th>'+
+                ' </tr></thead>' +
+                '<tbody>');
     $.each(experts.filterByCountry(country), function(index, expert){
-        var row = '<tr><td>' + expert.first_name + ' ' + expert.last_name + '</td><td>' + expert.country + '</td></tr>';
+        var row =   '<tr><td class="last-name">' + expert.last_name + '</td>'+
+                    '<td class="first-name">'  + expert.first_name + '</td>' +
+                    '<td class="country">' + expert.country + '</td></tr>';
         table.append(row);
     })
+    table.append("</tbody>");
+    table.tablesorter();
 }
 
 

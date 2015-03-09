@@ -12,11 +12,9 @@
 
 /*--------- EXPERIENCE FILTER -------------*/
 fieldset.group  {
-    margin-top: .5em;
+    margin-top: 0;
     border: none;
     padding: 0;
-    margin-bottom: 1.25em;
-    padding: .125em;
 
 }
 
@@ -114,6 +112,7 @@ ul.checkbox li.focus  {
 #result-table {
     width: 100% ;
     text-align: left;
+    border:none;
 }
 
 

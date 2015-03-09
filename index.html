@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <title>Exploring World Countries with D3 | TechSlides</title>
   <link rel="stylesheet" href="css/normal.css">
+  <link rel="stylesheet" href="js/tablesorter/themes/blue/style.css">
 <style>
 
 </style>
@@ -64,7 +65,7 @@
       <div id="map">
       </div>
     </div>
-
+<div id="result-box">
     <fieldset class="group clearfix">
       <legend>Filter by experiences</legend>
       <ul class="checkbox">
@@ -79,8 +80,7 @@
       </ul>
     </fieldset>
 
-    <table id="expert-table">
-      </table>
+    <table id="expert-table" class="tablesorter"></table>
     </div>
 
     <div id="result"></div>
@@ -95,6 +95,7 @@
 <script src="js/topojson.v1.min.js"></script>
 <script src="js/jquery-2.1.3.js"></script>
 <script src="js/underscore.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script>
 
   function compareLastName (expert1, expert2) {
