@@ -5,6 +5,8 @@ var height = width * 2/3;
 
 var topo,projection,path,svg,g;
 
+var activeFilters = [];
+
 var mapColor = "#c19a6b";
 
 var zoom = d3.behavior.zoom()
@@ -48,6 +50,18 @@ function setup(width,height){
 
     drawExpertTable();
 }
+
+//Add listener to filter checkboxes
+$('input[type=checkbox]').change(
+    function(){
+        if (this.checked) {
+            activeFilters.push(this.value);
+        }
+    }
+ //   console.log(activeFilters);
+   //redraw ExpertTable
+    //drawExpertTable();
+);
 
 d3.json("data/world-topo.json", function(error, world) {
 
@@ -160,39 +174,48 @@ function throttle() {
 //        table.append(row);
 //    })
 //}
+
 function drawExpertTable(country) {
-    var table = $('#expert-table');
-    table.html('<thead><tr>' +
+    var showingExperts = [];
+    var expertTable = $('#expert-table');
+    expertTable.html('');
+    expertTable.html('<thead><tr>' +
                     '<th class="header headerSortUp headerSortDown">Last Name</th>' +
                     '<th class="header  headerSortUp headerSortDown" >First Name</th>' +
                     '<th class="header headerSortUp headerSortDown">Country</th>'+
                 ' </tr></thead>' +
                 '<tbody>');
-    $.each(experts.filterByCountry(country), function(index, expert){
+
+    country ? showingExperts = experts.filterByCountry(country) : showingExperts = experts;
+  //  if (activeFilters) { showingExperts = experts.filterByExperiences() ;}
+
+    $.each(showingExperts, function(index, expert){
         var row =   '<tr><td class="last-name">' + expert.last_name + '</td>'+
                     '<td class="first-name">'  + expert.first_name + '</td>' +
                     '<td class="country">' + expert.country + '</td></tr>';
-        table.append(row);
+        expertTable.append(row);
     })
-    table.append("</tbody>");
-    table.tablesorter();
+    expertTable.append("</tbody>");
+    expertTable.tablesorter();
 }
 
 
 
 
-function activeFilters() {
-    var filtering = [];
-    var n =  $("input:checked").length;
-    if ( n ) {
-        for (i = 0; i < n; i++) {
-            filtering.push( $("input:checked")[i].value);
-        }
-        return filtering;
-    } else {
-        return false ;
-    }
-}
+
+
+//function activeFilters() {
+//    var filtering = [];
+//    var n =  $("input:checked").length;
+//    if ( n ) {
+//        for (i = 0; i < n; i++) {
+//            filtering.push( $("input:checked")[i].value);
+//        }
+//        return filtering;
+//    } else {
+//        return false ;
+//    }
+//}
 
 /**
  * JUST AN EXPERIMENT -- NOT IN USE

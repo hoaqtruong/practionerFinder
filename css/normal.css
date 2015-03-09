@@ -101,7 +101,7 @@ ul.checkbox li.focus  {
 
 
 /*--------- RESULT -------------*/
-#result-box {
+#result-wrapper {
     float: right;
     width: 48%;
     margin: 10px auto 0 5px;

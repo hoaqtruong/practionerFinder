@@ -65,7 +65,7 @@
       <div id="map">
       </div>
     </div>
-<div id="result-box">
+<div id="result-wrapper">
     <fieldset class="group clearfix">
       <legend>Filter by experiences</legend>
       <ul class="checkbox">
@@ -138,7 +138,7 @@
       var matching_experiences = _.intersection(expert.experiences, desired_experiences);
       return matching_experiences.length > 0;
     })
-    return filtered.sort(compareExperts);
+    return filtered.sort(compareLastName);
   }
 
 </script>
