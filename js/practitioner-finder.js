@@ -2,7 +2,7 @@ d3.select(window).on("resize", throttle);
 
 var zoom = d3.behavior.zoom()
     .scaleExtent([1, 8])
-    .on("zoom", move);
+    .on("zoom", zoomed);
 
 console.log(zoom.translate());
 
@@ -14,8 +14,6 @@ var topo,projection,path,svg,g;
 var mapColor = "#c19a6b";
 
 var tooltip = d3.select("#map").append("div").attr("class", "tooltip hidden");
-
-//document.getElementById("zoom_in").click(zoomManual("in"));
 
 setup(width,height);
 
@@ -89,6 +87,10 @@ function redraw() {
     d3.select('svg').remove();
     setup(width,height);
     draw(topo);
+}
+
+function zoomed() {
+    g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
 function move() {
