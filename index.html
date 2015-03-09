@@ -65,8 +65,21 @@
       </div>
     </div>
 
-    <div id="result-box" class="clearfix">
-      <table id="expert-table">
+    <fieldset class="group clearfix">
+      <legend>Filter by experiences</legend>
+      <ul class="checkbox">
+         <li><input type="checkbox" id="invest-trace" class="experience"  value="Investigation/Tracing"><label>Investigation/Tracing</label></li>
+         <li><input type="checkbox" id="freeze-restrain" class="experience" value="Freezing/Restraint of Assets"><label>Freezing/Restraint of Assets</label></li>
+         <li><input type="checkbox" id="FMLA-prep-exec" class="experience" value="FMLA Preparation/Execution"><label>FMLA Preparation/Execution</label></li>
+         <li><input type="checkbox" id="repat" class="experience" value="Repatriation"><label>Repatriation</label></li>
+         <li><input type="checkbox" id="forensic" class="experience" value="Forensic Analysis"><label>Forensic Analysis</label></li>
+         <li><input type="checkbox" id="prosecute" class="experience" value="Prosecution"><label>Prosecution</label></li>
+         <li><input type="checkbox" id="judicature" class="experience" value="Judicary"><label>Judicary</label></li>
+         <li><input type="checkbox" id="intel-analyze-collect" class="experience" value="Intelligence Analysis/Collection (FIU)"><label>Intelligence Analysis/ <span>Collection (FIU)</span></label></li>
+      </ul>
+    </fieldset>
+
+    <table id="expert-table">
       </table>
     </div>
 
@@ -78,13 +91,13 @@
   <!--<button id="save">Save Map to SVG</button>-->
 </div>
 
-<script src="js/d3.js"></script>
+<script src="js/d3/d3.js"></script>
 <script src="js/topojson.v1.min.js"></script>
 <script src="js/jquery-2.1.3.js"></script>
 <script src="js/underscore.js"></script>
 <script>
 
-  function compareExperts (expert1, expert2) {
+  function compareLastName (expert1, expert2) {
     if (expert1.country > expert2.country) {
       return true;
     }
@@ -117,7 +130,7 @@
    var filtered = this.filter(function(expert) {
       return expert.country == country;
     })
-    return filtered.sort(compareExperts);
+    return filtered.sort(compareLastName);
   }
   experts.filterByExperiences = function(desired_experiences) {
     var filtered = this.filter(function(expert) {

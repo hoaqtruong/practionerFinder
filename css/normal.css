@@ -10,6 +10,57 @@
     overflow: auto;
 }
 
+/*--------- EXPERIENCE FILTER -------------*/
+fieldset.group  {
+    margin-top: .5em;
+    border: none;
+    padding: 0;
+    margin-bottom: 1.25em;
+    padding: .125em;
+
+}
+
+fieldset.group legend {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    margin-left: 1em;
+    font-size: 100%;
+    color: rgba(0, 65, 106, 1.0);
+}
+
+
+ul.checkbox  {
+    margin: 0;
+    padding: 0.6em 0;
+    margin-left: 1em;
+    list-style: none;
+}
+
+ul.checkbox li input {
+    margin-right: 0;
+}
+
+ul.checkbox li {
+    color: rgba(0, 65, 106, 1.0);
+    font-size: 0.8em;
+    display: inline-block;
+    width: 48%;
+    vertical-align: text-top;
+}
+
+ul.checkbox li span {
+    margin-left: 1.8em;
+}
+ul.checkbox li label {
+margin-left: 0.5em;
+}
+ul.checkbox li:hover,
+ul.checkbox li.focus  {
+    background-color: rgba(0, 65, 106, .1);
+}
+
+
 /*--------- MAP -------------*/
 
 .overlay {

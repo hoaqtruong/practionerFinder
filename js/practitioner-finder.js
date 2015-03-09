@@ -124,7 +124,10 @@ function showPractioners() {
   console.log("zoom end");
 }
 
-
+/**
+ * JUST AN EXPERIMENT -- NOT IN USE
+ * Add zoom functions using button + and _.
+ */
 function zoomManual(zoomDirection) {
 
     if (zoomDirection == "in") {
@@ -149,6 +152,14 @@ function throttle() {
     }, 200);
 }
 
+//function drawExpertTable(country) {
+//    var table = $('#expert-table');
+//    table.html('<tr><th>Name</th><th>Country</th> </tr>');
+//    $.each(experts.filterByCountry(country), function(index, expert){
+//        var row = '<tr><td>' + expert.first_name + ' ' + expert.last_name + '</td><td>' + expert.country + '</td></tr>';
+//        table.append(row);
+//    })
+//}
 function drawExpertTable(country) {
     var table = $('#expert-table');
     table.html('<tr><th>Name</th><th>Country</th> </tr>');
@@ -156,6 +167,22 @@ function drawExpertTable(country) {
         var row = '<tr><td>' + expert.first_name + ' ' + expert.last_name + '</td><td>' + expert.country + '</td></tr>';
         table.append(row);
     })
+}
+
+
+
+
+function activeFilters() {
+    var filtering = [];
+    var n =  $("input:checked").length;
+    if ( n ) {
+        for (i = 0; i < n; i++) {
+            filtering.push( $("input:checked")[i].value);
+        }
+        return filtering;
+    } else {
+        return false ;
+    }
 }
 
 /**
