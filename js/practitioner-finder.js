@@ -30,7 +30,6 @@ var svgBBox = {top: -height/2, left: -width/2, bottom: height/2, right: width/2}
 //  ]]
 //  }
 //}
-
 var tooltip = d3.select("#map").append("div").attr("class", "tooltip hidden");
 
 setup(width,height);
@@ -209,10 +208,10 @@ function drawExpertTable() {
     })
 
 
-//    $('#expert-table').tablesorter({
-//        widthFixed: true,
-//        widgets: ['zebra']
-//    }).tablesorterPager({container: $("#pager")});
+    //$('#expert-table').tablesorter({
+    //    widthFixed: true,
+    //    widgets: ['zebra']
+    //}).tablesorterPager({container: $("#pager")});
 
 }
 
