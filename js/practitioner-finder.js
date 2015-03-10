@@ -187,7 +187,11 @@ function setupExpertTable() {
     '<th class="header headerSortUp headerSortDown">Country</th>'+
     '<th class="header">Experiences</th></tr></thead>');
     expertTable.append('<tbody></tbody>');
+
+    expertTable.tablesorter()
+      .tablesorterPager({container: $("#pager")});
 }
+
 /**
  * Resets the rows of the expert table tbody with the currently filtered experts.
  */
@@ -207,11 +211,7 @@ function drawExpertTable() {
                     '<td class="experiences">' + expert.experiences.join(' ') + '</td></tr>';
         expertTableBody.append(row);
     })
-
-//    $('#expert-table').tablesorter({
-//        widthFixed: true,
-//        widgets: ['zebra']
-//    }).tablesorterPager({container: $("#pager")});
+    $('#expert-table').trigger('update');
 }
 
 
