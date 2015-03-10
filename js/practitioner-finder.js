@@ -185,8 +185,8 @@ function setupExpertTable() {
     '<th class="header headerSortUp headerSortDown">Last Name</th>' +
     '<th class="header  headerSortUp headerSortDown" >First Name</th>' +
     '<th class="header headerSortUp headerSortDown">Country</th>'+
-    '<th class="header">Experiences</th></tr></thead>' +
-    '<tbody>');
+    '<th class="header">Experiences</th></tr></thead>');
+    expertTable.append('<tbody></tbody>');
 }
 /**
  * Resets the rows of the expert table tbody with the currently filtered experts.
@@ -208,12 +208,13 @@ function drawExpertTable() {
         expertTableBody.append(row);
     })
 
-    //$('#expert-table').tablesorter({
-    //    widthFixed: true,
-    //    widgets: ['zebra'
-    //}).tablesorterPager({container: $("#pager")});
-}
 
+//    $('#expert-table').tablesorter({
+//        widthFixed: true,
+//        widgets: ['zebra']
+//    }).tablesorterPager({container: $("#pager")});
+
+}
 
 /**
  * JUST AN EXPERIMENT -- NOT IN USE
