@@ -210,7 +210,7 @@ function drawExpertTable() {
 
     //$('#expert-table').tablesorter({
     //    widthFixed: true,
-    //    widgets: ['zebra']
+    //    widgets: ['zebra'
     //}).tablesorterPager({container: $("#pager")});
 }
 
