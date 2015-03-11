@@ -129,6 +129,32 @@ ul.checkbox li.focus  {
 }
 
 
+/*--------- RESULT -------------*/
+#pager-wrapper {
+    width: 100%;
+    align-content: center;
+}
+#pager form {
+    width: 55%;
+    margin: 10px auto 0 auto;
+    background-color: rgba(0, 65, 106, 0.1);
+    -moz-border-radius: 1em;
+    border-radius: 1em;
+}
+#pager img {
+    margin-top: 5px;
+}
+#pager img.first {
+    margin-left: 5px;
+}
+
+#expert-table_pager_info {
+    color: rgba(0, 65, 106, 1.0);
+    font-size: .8em;
+    text-align: top;
+
+}
+
 #next{
     float:right;
 }
