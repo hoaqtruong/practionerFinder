@@ -124,6 +124,8 @@ function draw(topo) {
                 selected_country = d.properties.name;
             }
             drawExpertTable();
+            //Set the country Selector to the selected country
+            //$("#country option:selected").prop("value",d.properties.name );
     })
 
 }
