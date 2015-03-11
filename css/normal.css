@@ -63,6 +63,10 @@ padding-left: 5%;
     stroke: #fff;
     stroke-width: .7px;
 }
+.selected-country {
+    stroke: #ff0000;
+    stroke-width: 1px;
+}
 
 
 /*--------- EXPERIENCE FILTER -------------*/

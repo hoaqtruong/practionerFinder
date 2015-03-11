@@ -145,10 +145,28 @@ function move() {
 }
 
 function countryClick(d, i) {
-  selected_country = (d.properties.name == selected_country) ? null : d.properties.name;
+  if (d.properties.name == selected_country) {
+    selected_country = null;
+    unHighlightCountries();
+  }
+  else {
+    selected_country = d.properties.name;
+    unHighlightCountries();
+    highlightCountry(selected_country)
+  }
+
   drawExpertTable();
   //Set the country Selector to the selected country
   $("#country-select").val(selected_country)
+}
+
+function unHighlightCountries(){
+  // jQuery's addClass doesn't work on svg path elements
+  $('svg path').attr('class', 'country')
+}
+function highlightCountry(country) {
+  // jQuery's removeClass doesn't work on svg path elements
+  $('svg path[title="' + country +'"]').attr('class', 'selected-country')
 }
 
 function showPractioners() {
