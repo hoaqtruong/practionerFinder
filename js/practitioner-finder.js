@@ -70,7 +70,7 @@ $('.checkbox input[type=checkbox]').change( function() {
 //Add listener to select country option
 $('#country').change( function() { 
         if (this.value != selected_country ) { 
-            selected_country = this.value; 
+            this.value == "all" ? selected_country = null : selected_country = this.value; 
             drawExpertTable();
         };
        });
@@ -190,6 +190,7 @@ function throttle() {
 
  d3.csv("data/countries-data.csv", function(error, countries) { 
     var countryOpts = $("#country"); 
+    countryOpts.append('<option id="all-countries" value="all">All countries</option>'); 
     countries.forEach(function(d){ 
         countryOpts.append('<option id="' + d.iso_a3 + '" value="' + d.name + '">' + d.name + '</option>'); 
     }) 
