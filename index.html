@@ -47,24 +47,28 @@
 
 
   <div id="instruction">Use zoom and pan tools to find a Asset Recovery Practitioner or simply use the below drop down menu to find by country</div>
-  <!--<div class="block">-->
-    <!--<label for="country">Select a Country:</label>-->
-    <!--<select id="country" name="country"></select>-->
-  <!--</div>-->
 
   <div id="next" style="visibility:hidden">NEXT</div>
   <div id="previous" style="visibility:hidden">PREVIOUS</div>
   <div id="container"  class="clearfix">
-    <div id="map-box">
-      <div id="zoom">
-        <img id="zoom_in" src="img/zoom-in.svg">
-        <img id="zoom_out" src="img/zoom-out.svg">
 
-        <!--<img id="zoom-in" class="zoomBtn" src="img/zoom-in.svg" />-->
-        <!--<img id="zoom-out" class="zoomBtn" src="img/zoom-out.svg" />-->
+    <div id="map-wrapper">
+
+      <div id="country-selector-wrapper">
+        <label for="country">Select a Country:</label>
+        <select id="country" name="country"></select>
       </div>
-      <div id="map">
-      </div>
+      <div id="map-box">
+
+        <div id="zoom">
+          <img id="zoom_in" src="img/zoom-in.svg">
+          <img id="zoom_out" src="img/zoom-out.svg">
+        </div>
+
+
+        <div id="map"></div>
+    </div>
+      
     </div>
 <div id="result-wrapper">
     <fieldset class="group clearfix">

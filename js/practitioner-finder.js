@@ -67,6 +67,14 @@ $('.checkbox input[type=checkbox]').change( function() {
     drawExpertTable();
 });
 
+//Add listener to select country option
+$('#country').change( function() { 
+        if (this.value != selected_country ) { 
+            selected_country = this.value; 
+            drawExpertTable();
+        };
+       });
+
 d3.json("data/world-topo.json", function(error, world) {
 
     var countries = topojson.feature(world, world.objects.countries).features;
@@ -175,6 +183,17 @@ function throttle() {
         redraw();
     }, 200);
 }
+
+/**
+ * Print out country selection options from countries-data.csv
+ */
+
+ d3.csv("data/countries-data.csv", function(error, countries) { 
+    var countryOpts = $("#country"); 
+    countries.forEach(function(d){ 
+        countryOpts.append('<option id="' + d.iso_a3 + '" value="' + d.name + '">' + d.name + '</option>'); 
+    }) 
+});
 
 /**
  * Creates head and empty tbody of expert table.

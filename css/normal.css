@@ -9,6 +9,61 @@
 .clearfix {
     overflow: auto;
 }
+/*---------- COUNTRY SELECTOR ---------*/
+#country-selector-wrapper {
+padding-left: 5%;
+}
+#country-selector-wrapper label {
+    font-weight: bold;
+    font-size: 80%;
+    color: #00416A;
+}
+
+
+/*--------- MAP -------------*/
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+#map-wrapper {
+    float: left;
+    width: 48%;
+}
+
+#map-box {
+
+    margin:10px 5px 0 auto;
+    padding:1px;
+    border:2px solid #d0d0d0;
+    border-radius: 5px;
+}
+
+#map {
+
+}
+
+#zoom {
+    left: 43%;
+    margin: 2px;
+    position: absolute;
+    z-index: 10;
+}
+
+#zoom-in {
+
+}
+
+#zoom-out {
+
+}
+
+.country:hover{
+    stroke: #fff;
+    stroke-width: .7px;
+}
+
 
 /*--------- EXPERIENCE FILTER -------------*/
 fieldset.group  {
@@ -51,60 +106,18 @@ ul.checkbox li span {
     margin-left: 1.8em;
 }
 ul.checkbox li label {
-margin-left: 0.5em;
+    margin-left: 0.5em;
 }
 ul.checkbox li:hover,
 ul.checkbox li.focus  {
     background-color: rgba(0, 65, 106, .1);
 }
 
-
-/*--------- MAP -------------*/
-
-.overlay {
-    fill: none;
-    pointer-events: all;
-}
-
-#map-box {
-    float: left;
-    width: 48%;
-    margin:10px 5px 0 auto;
-    padding:1px;
-    border:2px solid #d0d0d0;
-    border-radius: 5px;
-}
-
-#map {
-
-}
-
-#zoom {
-    left: 44%;
-    margin: 2px;
-    position: absolute;
-    z-index: 10;
-}
-
-#zoom-in {
-
-}
-
-#zoom-out {
-
-}
-
-.country:hover{
-    stroke: #fff;
-    stroke-width: .7px;
-}
-
-
 /*--------- RESULT -------------*/
 #result-wrapper {
     float: right;
     width: 48%;
-    margin: 10px auto 0 5px;
+    margin: 0px auto 0 5px;
 }
 #result {
 
