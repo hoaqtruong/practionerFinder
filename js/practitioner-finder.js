@@ -68,7 +68,7 @@ $('.checkbox input[type=checkbox]').change( function() {
 });
 
 //Add listener to select country option
-$('#country').change( function() { 
+$('#country-select').change( function() { 
         if (this.value != selected_country ) { 
             this.value == "all" ? selected_country = null : selected_country = this.value; 
             drawExpertTable();
@@ -116,17 +116,7 @@ function draw(topo) {
         .on("mouseout",  function(d,i) {
             tooltip.classed("hidden", true)
         })
-        .on('click', function(d, i) {
-            if (d.properties.name == selected_country) {
-                selected_country = null;
-            }
-            else {
-                selected_country = d.properties.name;
-            }
-            drawExpertTable();
-            //Set the country Selector to the selected country
-            //$("#country option:selected").prop("value",d.properties.name );
-    })
+        .on('click', countryClick)
 
 }
 
@@ -152,6 +142,13 @@ function move() {
     t[1] = Math.min(height / 2 * (s - 1) + h * s, Math.max(height / 2 * (1 - s) - h * s, t[1]));
 
     g.style("stroke-width", 1 / s).attr("transform", "translate(" + t + ")scale(" + s + ")");
+}
+
+function countryClick(d, i) {
+  selected_country = (d.properties.name == selected_country) ? null : d.properties.name;
+  drawExpertTable();
+  //Set the country Selector to the selected country
+  $("#country-select").val(selected_country)
 }
 
 function showPractioners() {
@@ -191,7 +188,7 @@ function throttle() {
  */
 
  d3.csv("data/countries-data.csv", function(error, countries) { 
-    var countryOpts = $("#country"); 
+    var countryOpts = $("#country-select"); 
     countryOpts.append('<option id="all-countries" value="all">All countries</option>'); 
     countries.forEach(function(d){ 
         countryOpts.append('<option id="' + d.iso_a3 + '" value="' + d.name + '">' + d.name + '</option>'); 
